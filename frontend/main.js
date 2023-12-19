@@ -1,5 +1,5 @@
 L.mapbox.accessToken =
-"pk.eyJ1IjoiZm1hY2VkbyIsImEiOiJjanp0a3FlZzEwNXdyM2hteDRmOTNsZDI3In0.UMzEBHFVDraOT5AkHcbe7A";
+"pk.eyJ1IjoiZm1hY2VkbyIsImEiOiJjbHFjcG05eDQwNHBkMmptc3FrMmhsYWd3In0.xwVmSRfTbh79_TwRqW0i5Q";
 const mapPopups = L.mapbox
 .map("map")
 .setView([51.50534963989, -0.090745464245823], 12)
