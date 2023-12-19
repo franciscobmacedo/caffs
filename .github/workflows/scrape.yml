@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+
+      - name: Cache dependencies
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-poetry-deps
+        with:
+          path: |
+            ~/.venv
+            ~/.cache/pypoetry
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pyproject.toml', '**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Scrape
+        run: |
+          poetry run python run.py
+        env:
+          X_IG_APP_ID: ${{ secrets.X_IG_APP_ID }}
+          SESSION_ID: ${{ secrets.SESSION_ID }}
+
+      - name: commit files to production
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: scrape
