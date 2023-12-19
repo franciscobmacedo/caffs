@@ -3,7 +3,9 @@ name: Tests
 on:
   schedule:
     - cron: "0 0 * * *"
-
+  push:
+    branches:
+      - main
 jobs:
   scrape:
     runs-on: ubuntu-latest
