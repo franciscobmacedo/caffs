@@ -1,8 +1,8 @@
 import requests
-from decouple import config
 import json
 from scraper.exceptions import InstagramScraperException
 from scraper.cleaner import clean
+from scraper.settings import X_IG_APP_ID, SESSION_ID
 
 URL = "https://www.instagram.com/api/v1/feed/user/21749057675/"
 
@@ -32,11 +32,8 @@ def get_location_set(
 
 
 def get_locations() -> list[dict]:
-    x_ig_app_id = config("X_IG_APP_ID")
-    sessionid = config("SESSION_ID")
-
-    headers = {"x-ig-app-id": x_ig_app_id}
-    cookies = {"sessionid": sessionid}
+    headers = {"x-ig-app-id": X_IG_APP_ID}
+    cookies = {"sessionid": SESSION_ID}
     max_id = None
     all_locations = []
     while True:
@@ -52,7 +49,7 @@ def get_locations() -> list[dict]:
 
 def pipeline():
     locations = get_locations()
-    with open("locations.json", "w") as f:
+    with open("items.json", "w") as f:
         json.dump(locations, f)
     clean(locations, True)
 

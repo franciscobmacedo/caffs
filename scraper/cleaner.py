@@ -1,6 +1,7 @@
 import json
 import requests
 import os
+from scraper.settings import BASE_URL, IMAGES_RELATIVE_PATH
 
 
 def extract_image(item: dict, code: str) -> bool:
@@ -13,9 +14,8 @@ def extract_image(item: dict, code: str) -> bool:
     if not img_url:
         return False
     r = requests.get(img_url)
-    image_path = f"frontend/images/{code}.webp"
-    if not os.path.exists("frontend/images"):
-        os.makedirs("frontend/images")
+    image_path = f"{IMAGES_RELATIVE_PATH}/{code}.webp"
+
     with open(image_path, "wb") as f:
         f.write(r.content)
 
@@ -26,72 +26,69 @@ def extract_code(item: dict) -> str | None:
     return item.get("code", None)
 
 
-def item_to_location(item: dict):
+def item_to_point(item: dict) -> dict:
     _location = item.get("location", {})
-    name = _location.get("name", None)
+    name = _location.get("name", "see post")
     lat = _location.get("lat", None)
     lng = _location.get("lng", None)
     if lat is None or lng is None:
         return None
-
     code = extract_code(item)
     if not code:
         raise Exception("No code found")
 
     has_image = extract_image(item, code)
-    location = {
-        "name": name,
-        "lat": lat,
-        "lng": lng,
-        "code": code,
-        "image": f"images/{code}.webp" if has_image else None,
+    description = (
+        f"<img src='{BASE_URL}/images/{code}.webp' width='200px' />"
+        if has_image
+        else ""
+    )
+    title = f"<a target='_blank' href='https://www.instagram.com/p/{code}/'>{name}</a>"
+    point = {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [lng, lat],
+        },
+        "properties": {
+            "title": title,
+            "description": description,
+            "marker-color": "#3bb2d0",
+            "marker-size": "large",
+            "marker-symbol": "rocket",
+        },
     }
-    return location
+    return point
 
 
-def get_locations(items: list[dict]) -> list[dict]:
-    locations = []
+def clean_points(items: list[dict]) -> dict:
     for item in items:
-        location = item_to_location(item)
-        if location is not None:
-            locations.append(location)
-    return locations
+        point = item_to_point(item)
+        if point:
+            yield point
 
 
-def convert_to_geojson(locations: list[dict], write: bool = False):
-    new_locations = []
-    for location in locations:
-        new_location = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [location["lng"], location["lat"]],
-            },
-            "properties": {
-                "title": f"<a target='_blank' href='https://www.instagram.com/p/{location['code']}/'>{location.get('name', 'see')}</a>",
-                "description": f"<img src='{location.get('image', '')}' width='200px' />",
-                "marker-color": "#3bb2d0",
-                "marker-size": "large",
-                "marker-symbol": "rocket",
-            },
-        }
-        new_locations.append(new_location)
+def clean(items: list[dict], write: bool = False) -> dict:
+    if not os.path.exists(IMAGES_RELATIVE_PATH):
+        os.makedirs(IMAGES_RELATIVE_PATH)
+
+    print(f"Cleaning {len(items)} items")
+    stream = clean_points(items)
+
+    feature_collection = {
+        "type": "FeatureCollection",
+        "features": list(stream),
+    }
+    print("done")
 
     if write:
         with open("frontend/locations.geojson", "w") as f:
-            json.dump(new_locations, f)
-    return new_locations
+            json.dump(feature_collection, f)
+    return feature_collection
 
 
-def clean(data: list[dict], write: bool = False):
-    locations = get_locations(data)
-    locations = convert_to_geojson(locations, write)
-
-    return locations
-
-
-def clean_from_file(write: bool = False):
-    with open("locations.json", "r") as f:
+def clean_from_file(write: bool = False) -> dict:
+    with open("items.json", "r") as f:
         data = json.load(f)
 
     return clean(data, write)
