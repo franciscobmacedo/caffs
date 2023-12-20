@@ -39,7 +39,7 @@ def item_to_point(item: dict) -> dict:
 
     has_image = extract_image(item, code)
     description = (
-        f"<img src='{BASE_URL}/images/{code}.webp' width='200px' />"
+        f"<img src='{BASE_URL}/frontend/images/{code}.webp' width='200px' />"
         if has_image
         else ""
     )
