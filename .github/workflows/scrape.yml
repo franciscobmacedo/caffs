@@ -45,6 +45,7 @@ jobs:
         env:
           X_IG_APP_ID: ${{ secrets.X_IG_APP_ID }}
           SESSION_ID: ${{ secrets.SESSION_ID }}
+          STATIC_URL:  'https://raw.githubusercontent.com/franciscobmacedo/caffs/main'
 
       - name: commit files to production
         uses: stefanzweifel/git-auto-commit-action@v5

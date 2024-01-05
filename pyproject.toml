@@ -1,14 +1,13 @@
 [tool.poetry]
-name = "caffsmap"
+name = "caffs"
 version = "0.1.0"
-description = ""
-authors = ["Francisco Macedo <franciscovcbm@gmail.com>"]
+description = "caffs not cafes instagram posts map"
+authors = ["Francisco Macedo <me@fmacedo.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-requests = "^2.31.0"
-python-decouple = "^3.8"
+python = "^3.11"
+instagraper = "^0.1.2"
 
 
 [build-system]

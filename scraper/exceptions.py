@@ -1,2 +1,0 @@
-class InstagramScraperException(Exception):
-    pass

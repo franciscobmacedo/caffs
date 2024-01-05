@@ -1,4 +1,11 @@
-from scraper import pipeline, clean_from_file
+import instagraper
+from decouple import config
 
-clean_from_file(True)
-# pipeline()
+static_url = config("STATIC_URL", default=None)
+
+instagraper.scrape(
+    username="caffs_not_cafes",
+    target="frontend",
+    with_map=True,
+    with_images=True,
+)
