@@ -123,13 +123,13 @@ files = [
 
 [[package]]
 name = "instagraper"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "instagraper-0.1.4-py3-none-any.whl", hash = "sha256:e37faf7b19568e4b00c3ca8c7857c46d0b87c436f42e1e62aac8a5aad71fa26b"},
-    {file = "instagraper-0.1.4.tar.gz", hash = "sha256:50d9a474c6d9ff4bfd82842a34a23a95d9df36ef875c64e6a79685e484fdd169"},
+    {file = "instagraper-0.1.5-py3-none-any.whl", hash = "sha256:ca887ebcac90a4261308888a7cd3df1a729c2c630047a1d77c4dff8a6638b0f1"},
+    {file = "instagraper-0.1.5.tar.gz", hash = "sha256:137271da27d1590fee3e6327f7cf6b686e334f5c57d69d247b06ac730b84168c"},
 ]
 
 [package.dependencies]
@@ -259,4 +259,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "befda2c7f8a85fe5eff13b4574a6331d7eaa7e76f28dfbcc3c27b6413538a6e5"
+content-hash = "bad6c590794554c85d395606f10e9cc08f652431b158698494c23496fa14944b"
