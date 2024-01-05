@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-instagraper = "^0.1.3"
+instagraper = "^0.1.4"
 
 
 [build-system]
