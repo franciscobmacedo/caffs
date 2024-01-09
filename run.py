@@ -5,7 +5,7 @@ static_url = config("STATIC_URL", default=None)
 
 instagraper.scrape(
     username="caffs_not_cafes",
-    target="frontend",
+    target="docs",
     map_output="index.html",
     with_images=True,
     static_url=static_url,
