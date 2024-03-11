@@ -1,11 +1,6 @@
 name: Scrape
 
-on:
-  schedule:
-    - cron: "0 0 * * *"
-  push:
-    branches:
-      - main
+on: []
 jobs:
   scrape:
     runs-on: ubuntu-latest
